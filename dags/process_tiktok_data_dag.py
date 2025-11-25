@@ -1,43 +1,73 @@
 import os
 from datetime import datetime
+
 from airflow.providers.standard.sensors.filesystem import FileSensor
-from airflow.sdk import task, dag
+from airflow.sdk import dag
 
-from include.consts import PROCESSED_PATH, RAW_PATH
+from include.consts import RAW_PATH
+from include.tasks.process_tiktok_data_tasks import (
+    check_file_empty,
+    file_is_empty,
+    extract_data,
+    transform_group,
+    load_data,
+)
 
 
-@dag(dag_id="process_tiktok_data_dag", start_date=datetime(2025,1,1), schedule=None, catchup=False)
-def process_tiktok_data():
+@dag(
+    dag_id="process_tiktok_data_dag",
+    start_date=datetime(2025, 1, 1),
+    schedule=None,
+    catchup=False,
+    tags=["etl", "tiktok"],
+)
+def process_tiktok_data_dag():
+    """
+    DAG: Process TikTok CSV Data.
 
-    @task
-    def check_file(file_path: str):
+    Workflow:
+    1. Wait for the TikTok CSV file to appear using FileSensor.
+    2. Check if the file is empty using a branching task.
+       - If empty, execute `file_is_empty`.
+       - Otherwise, continue processing.
+    3. Extract data from the CSV into a DataFrame.
+    4. Transform/clean the DataFrame using `transform_group`.
+    5. Load the cleaned data using `load_data`.
 
-        from include.file_handler import FileHandler
-        if FileHandler.is_empty(file_path):
-            return "empty_file"
-        return "process_file"
+    Notes:
+    - RAW_PATH defines the folder where the raw CSV is stored.
+    - All task functions are implemented in `process_tiktok_data_tasks`.
+    """
 
-    @task
-    def process_file(file_path: str):
-        from include.csv_handler import CSVHandler
-        base_name = os.path.basename(file_path).replace(".csv", "")
-        output_path = os.path.join(PROCESSED_PATH, f"{base_name}_processed.csv")
-        CSVHandler(file_path).replace_nulls().sort_by_date().clean_content().save(output_path)
-        return output_path
+    wait_file = FileSensor(
+        task_id="wait_for_file",
+        filepath=os.path.join(RAW_PATH, "tiktok_data.csv"),
+        poke_interval=10,
+        timeout=3600,
+        mode="poke",
+        fs_conn_id="fs_default",
+    )
 
-    @task
-    def log_empty(file_path: str):
-        print(f"File {file_path} is empty")
+    file_path = os.path.join(RAW_PATH, "tiktok_data.csv")
 
-    files = [os.path.join(RAW_PATH, f) for f in os.listdir(RAW_PATH) if f.endswith(".csv")]
+    # Branching task to check if the file is empty
+    branch = check_file_empty(file_path)
 
-    for f in files:
-        sensor = FileSensor(task_id=f"wait_{os.path.basename(f)}", filepath=f, poke_interval=10, timeout=300)
-        branch = check_file(f)
-        empty = log_empty(f)
-        processed = process_file(f)
-        sensor >> branch
-        branch >> empty
-        branch >> processed
+    # Task executed if file is empty
+    empty_task = file_is_empty()
 
-process_tiktok_data_dag = process_tiktok_data()
+    # Extract CSV data into a DataFrame
+    data_df = extract_data(file_path)
+
+    # Transform and clean the DataFrame
+    cleaned_df = transform_group(data_df)
+
+    # Load the cleaned data to the target destination
+    output_file = load_data(cleaned_df, file_path)
+
+    wait_file >> branch
+    branch >> [empty_task, data_df]
+    data_df >> cleaned_df >> output_file
+
+
+process_tiktok_data_dag()

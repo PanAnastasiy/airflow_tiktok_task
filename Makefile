@@ -6,14 +6,7 @@ LOGS = docker logs
 ENV = --env-file .env
 
 AIRFLOW_COMPOSE = docker_compose/airflow.yml
-POSTGRES_COMPOSE = docker_compose/postgres.yml
-MONGO_COMPOSE = docker_compose/mongo.yml
-
-POSTGRES_CONTAINER = airflow_postgres
-MONGO_CONTAINER = airflow_mongo
 AIRFLOW_CONTAINER = airflow_webserver
-
-COMPOSE_ALL = -f $(POSTGRES_COMPOSE) -f $(MONGO_COMPOSE) -f $(AIRFLOW_COMPOSE)
 
 .PHONY: up
 up:
@@ -21,33 +14,11 @@ up:
 	$(DC) $(ENV) -f $(AIRFLOW_COMPOSE) up -d
 	@echo "All containers are up!"
 
-.PHONY: up-postgres
-up-postgres:
-	@echo "Starting PostgreSQL..."
-	$(DC) $(ENV) -f $(POSTGRES_COMPOSE) up -d
-
-.PHONY: up-mongo
-up-mongo:
-	@echo "Starting MongoDB..."
-	$(DC) $(ENV) -f $(MONGO_COMPOSE) up -d
-
 .PHONY: down
 down:
-	@echo "Stopping all containers..."
-	$(DC) $(ENV) -f $(POSTGRES_COMPOSE) down
-	$(DC) $(ENV) -f $(MONGO_COMPOSE) down
+	@echo "Stopping container..."
 	$(DC) $(ENV) -f $(AIRFLOW_COMPOSE) down
 	@echo "Containers stopped."
-
-.PHONY: logs-postgres
-logs-postgres:
-	@echo "Showing PostgreSQL logs..."
-	$(LOGS) -f $(POSTGRES_CONTAINER)
-
-.PHONY: logs-mongo
-logs-mongo:
-	@echo "Showing MongoDB logs..."
-	$(LOGS) -f $(MONGO_CONTAINER)
 
 .PHONY: logs-airflow
 logs-airflow:

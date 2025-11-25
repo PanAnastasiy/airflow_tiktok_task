@@ -1,74 +1,57 @@
-# 🍓🍓🍓Big Data Internship Tasks🍓🍓🍓
+# TikTok Data Pipeline
 
-Welcome to the **Big Data Internship Project**! This repository contains a collection of tasks and exercises designed to help interns gain hands-on experience with Big Data tools, pipelines, and analytics.
+This project implements a **data pipeline** using **Apache Airflow 3**, which processes TikTok CSV files and loads them into **MongoDB**. It leverages **Data-Aware Scheduling (Datasets)** for automatic triggering when new files appear in a directory.
 
 ---
 
-## 📌 Project Overview
-
-The goal of this project is to provide practical experience in:
-
-- SQL & relational databases (PostgreSQL, Snowflake)
-- Containerized environments (Docker & Docker Compose)
-- Git workflow and version control best practices
-- Learn base of new technologies in Big Data
-- Each task is independent and focuses on a specific Big Data skill.
+## 📂 Project Structure
 
 ```
-
-innovise_trainee/
-
-│
-├── 📁 logs/                     # Main application logs
-│
-├── 📋 TASKS/                    # Project tasks implementation
-│   ├── task_1/                  # Task 1
-│   ├── task_2/                  # Task 2
-│   ├── task_3/                  # Task 3
-│   ├── task_4/                  # Task 4
-│   ├── task_5/                  # Task 5
-│   └── utils/                   # Utility code
-│       ├── __init__.py
-│       └── consts.py            # Project constants
-│
-├── 🧪 tests/                    # Test suite
-│   ├── task_4/                  # Tests for task 4
-│   └── task_5/                  # Tests for task 5
-│
-├── 🐳 docker_compose/           # Docker containers for various databases
-│   ├── pagila_docker/           # PostgreSQL with Pagila database
-│   ├── snowflake_docker/        # Snowflake data
-│   ├── spark_docker/            # Apache Spark environment
-│   └── students_docker/         # Container for student-related tasks
-│
-├── 📚 resources/                # Project resources and datasets
-│   ├── csv/                     # CSV files
-│   ├── json/                    # JSON files
-│   ├── music/                   # Music files
-│   └── xml/                     # XML files and schemas
-│
-├── 🐳 .dockerignore             # Docker ignore file
-├── 🌿 .env                      # Environment variables file
-├── 📍 .gitignore                # Git ignore file
-├── ⚙️  .pre-commit-config.yaml  # Pre-commit hooks configuration
-├── 📜 LICENSE                   # Project license
-├── 🛠️  Makefile                 # Automation commands
-├── 📦 poetry.lock               # Poetry lock file
-├── ⚙️  pyproject.toml           # Project configuration & dependencies
-└── 📖 README.md                 # Project documentation
-
+airflow_tiktok_task/
+├── .venv/
+├── config/
+│ ├── *.yaml / *.json / *.ini
+├── dags/
+│ ├── load_tiktok_to_mongo.py
+│ ├── process_tiktok_data.py
+├── data/
+│ ├── raw/
+│ ├── processed/
+├── docker_compose/
+│ └── docker-compose.yml
+├── include/
+│ ├── handlers/
+│ │ ├── csv_handler.py
+│ │ └── mongo_handler.py
+│ ├── queries/
+│ ├── tasks/
+│ └── consts.py
+├── logs/
+├── tests/
+│ ├── csv_tests.py
+│ └── mongo_tests.py
+├── .dockerignore
+├── .env
+├── .gitignore
+├── .pre-commit-config.yaml
+├── LICENSE
+├── Makefile
+├── poetry.lock
+├── pyproject.toml
+└── README.md
 ```
+### 1️⃣ `Graph view of the first DAG`
 
-## 📝 Tasks Overview
+![img_1.png](graphic/img_1.png)
 
-Task 1: Using a demo database, write SQL queries to accomplish the following statements.
+### 2️⃣ `Results of completing the tasks of the FIRST dag`
 
-Task 2: Determine and describe if it is possible to replace code with a kind of cycle in SQL procedure.
+![img_4.png](graphic/img_4.png)
 
-Task 3: Simple tasks to learn the basic functions of Numpy and Pandas
+### 3️⃣ `Results of completing the tasks of the SECOND dag`
 
-Task 4: The task requires building an OOP/SOLID-compliant Python application
-to load student and room data into a relational database, execute complex analytical SQL queries with index optimization,
-and output the results in a specified JSON or XML format.
+![img_2.png](graphic/img_2.png)
 
-Task 5: Using a demo database, write PySpark Code (No SQL) to accomplish the following statements.
+### 4️⃣ `General picture of the execution of two dags`
+
+![img_3.png](graphic/img_3.png)

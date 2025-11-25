@@ -1,0 +1,19 @@
+[
+  {
+    "$match": {
+      "$expr": {
+        "$lt": [
+          {
+            "$strLenCP": {
+              "$ifNull": [
+                { "$toString": "$content" },
+                ""
+              ]
+            }
+          },
+          5
+        ]
+      }
+    }
+  }
+]

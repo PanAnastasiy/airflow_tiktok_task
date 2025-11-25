@@ -1,8 +1,14 @@
 import os
 from datetime import datetime
-from airflow.sdk import dag, task
-from include.consts import PROCESSED_DATASET, MONGO_CONN_URI, MONGO_DB, MONGO_COLLECTION, PROCESSED_PATH
-from include.mongo_handler import MongoHandler
+from dotenv import load_dotenv
+
+from airflow.sdk import dag
+
+from include.consts import PROCESSED_DATASET, PROCESSED_PATH
+from include.tasks.load_to_mongo_tasks import load
+
+load_dotenv()
+
 
 @dag(
     dag_id="load_tiktok_to_mongo",
@@ -12,24 +18,28 @@ from include.mongo_handler import MongoHandler
     tags=["tiktok", "mongo"],
 )
 def load_to_mongo():
+    """
+    DAG: Load TikTok Processed CSV Files into MongoDB.
 
-    @task
-    def load(file_path: str):
-        mongo = MongoHandler(uri=MONGO_CONN_URI, db_name=MONGO_DB)
-        mongo.connect()
-        result = mongo.load_csv(MONGO_COLLECTION, file_path)
-        mongo.close()
-        return f"{len(result)} records loaded from {file_path}" if result else f"Failed to load {file_path}"
+    Workflow:
+    1. List all processed CSV files from the configured PROCESSED_PATH.
+    2. For each file ending with "_processed.csv":
+       - Call the 'load' task to upload the CSV content to MongoDB.
 
-    # Берем все обработанные CSV
+    Requirements:
+    - Environment variables loaded from `.env`.
+    - PROCESSED_DATASET and PROCESSED_PATH defined in `include.consts`.
+    - `load` task implemented in `include.tasks.load_to_mongo_tasks`.
+    """
+
     processed_files = [
         os.path.join(PROCESSED_PATH, f)
         for f in os.listdir(PROCESSED_PATH)
         if f.endswith("_processed.csv")
     ]
 
-    for f in processed_files:
-        load(f)
+    for file_path in processed_files:
+        load(file_path)
 
 
-load_to_mongo_dag = load_to_mongo()
+load_to_mongo()
