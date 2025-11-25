@@ -1,0 +1,19 @@
+[project]
+name = "tik_tok_processing_data_with_airflow"
+version = "0.1.0"
+description = "Innowise trainee task to learn basic knowledge for Apache Airflow"
+authors = [
+    {name = "Stanislau Panfilenka",email = "stanislav.panfilenko@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "pandas (>=2.3.3,<3.0.0)",
+    "apache-airflow (>=3.1.3,<4.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

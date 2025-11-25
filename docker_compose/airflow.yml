@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  airflow:
+    image: apache/airflow:3.0.0
+    container_name: airflow
+    restart: always
+    environment:
+      AIRFLOW__CORE__EXECUTOR: ${AIRFLOW__CORE__EXECUTOR}
+      AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW__CORE__FERNET_KEY}
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+      AIRFLOW__CORE__LOAD_EXAMPLES: ${AIRFLOW__CORE__LOAD_EXAMPLES}
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@airflow-postgres:5432/${POSTGRES_DB}
+      AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: 30
+      AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL: 30
+      AIRFLOW__SCHEDULER__PARSING_PROCESS_TIMEOUT: 30
+      PYTHONPATH: /opt/airflow
+    depends_on:
+      - airflow-postgres
+      - mongo
+    ports:
+      - "${AIRFLOW_WEBSERVER_PORT}:8080"
+    volumes:
+      - ../:/opt/airflow
+    entrypoint: >
+      /bin/bash -c "
+      pip install pymongo &&
+      airflow standalone
+      "
+
+  airflow-postgres:
+    image: postgres:15
+    container_name: airflow-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo:7
+    container_name: airflow-mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - "${MONGO_PORT}:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  postgres_data:
+  mongo_data:
+
