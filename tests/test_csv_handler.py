@@ -1,4 +1,5 @@
 import pandas as pd
+
 from include.handlers.csv_handler import CSVHandler
 
 
@@ -20,10 +21,9 @@ def test_replace_nulls_replaces_nan():
 
 
 def test_sort_by_date_sorts_correctly():
-    df = pd.DataFrame({
-        "created_date": ["2025-11-26", "2025-11-25", "2025-11-27"],
-        "value": [1, 2, 3]
-    })
+    df = pd.DataFrame(
+        {"created_date": ["2025-11-26", "2025-11-25", "2025-11-27"], "value": [1, 2, 3]}
+    )
     sorted_df = CSVHandler.sort_by_date(df)
     dates = sorted_df["created_date"].tolist()
     assert dates == ["2025-11-25", "2025-11-26", "2025-11-27"]

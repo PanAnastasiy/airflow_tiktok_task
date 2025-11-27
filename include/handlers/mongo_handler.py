@@ -11,9 +11,9 @@ class MongoHandler:
     """
 
     def __init__(
-            self,
-            uri: str = "mongodb://localhost:27017/",
-            db_name: str = "test_db",
+        self,
+        uri: str = "mongodb://localhost:27017/",
+        db_name: str = "test_db",
     ):
         """
         Initialize MongoHandler with URI and database name.
@@ -35,9 +35,7 @@ class MongoHandler:
         self.db = self.client[self.db_name]
         print(f"[INFO] Connected to MongoDB at {self.uri}, DB: {self.db_name}")
 
-    def insert_many(
-            self, collection: str, data: List[Dict[str, Any]]
-    ) -> Optional[List[Any]]:
+    def insert_many(self, collection: str, data: List[Dict[str, Any]]) -> Optional[List[Any]]:
         """
         Insert multiple documents into a MongoDB collection.
 

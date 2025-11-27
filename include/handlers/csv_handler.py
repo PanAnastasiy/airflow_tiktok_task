@@ -69,9 +69,7 @@ class CSVHandler:
         """
         if "content" in df.columns:
             df["content"] = df["content"].apply(
-                lambda text: re.sub(
-                    r"[^а-яА-Яa-zA-Z0-9 .,!?:;\"'-]", "", str(text)
-                )
+                lambda text: re.sub(r"[^а-яА-Яa-zA-Z0-9 .,!?:;\"'-]", "", str(text))
             )
         return df
 

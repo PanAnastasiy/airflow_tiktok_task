@@ -16,9 +16,7 @@ def load(file_path: str) -> str:
     Returns:
         str: Message indicating success or failure of the load operation.
     """
-    mongo = MongoHandler(
-        uri=os.getenv("MONGO_CONN_URI"), db_name=os.getenv("MONGO_DB")
-    )
+    mongo = MongoHandler(uri=os.getenv("MONGO_CONN_URI"), db_name=os.getenv("MONGO_DB"))
     mongo.connect()
     result = mongo.load_csv(os.getenv("MONGO_COLLECTION"), file_path)
     mongo.close()

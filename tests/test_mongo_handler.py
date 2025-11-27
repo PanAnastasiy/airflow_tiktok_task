@@ -1,6 +1,6 @@
+import mongomock
 import pandas as pd
 import pytest
-import mongomock
 
 from include.handlers.mongo_handler import MongoHandler
 

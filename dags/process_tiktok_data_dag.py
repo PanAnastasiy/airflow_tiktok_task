@@ -7,10 +7,10 @@ from airflow.sdk import dag
 from include.consts import RAW_PATH
 from include.tasks.process_tiktok_data_tasks import (
     check_file_empty,
-    file_is_empty,
     extract_data,
-    transform_group,
+    file_is_empty,
     load_data,
+    transform_group,
 )
 
 
