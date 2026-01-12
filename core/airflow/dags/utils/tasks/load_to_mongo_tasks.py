@@ -2,7 +2,7 @@ import os
 
 from airflow.sdk import task
 
-from core.airflow.dags.include.handlers.mongo_handler import MongoHandler
+from core.airflow.dags.utils.handlers.mongo_handler import MongoHandler
 
 
 @task

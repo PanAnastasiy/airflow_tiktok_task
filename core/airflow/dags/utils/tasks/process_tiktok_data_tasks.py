@@ -3,9 +3,9 @@ import os
 import pandas as pd
 from airflow.sdk import task, task_group
 
-from core.airflow.dags.include.consts import PROCESSED_PATH
-from core.airflow.dags.include.handlers.csv_handler import CSVHandler
-from core.airflow.dags.include.handlers.file_handler import FileHandler
+from core.airflow.dags.utils.consts import PROCESSED_PATH
+from core.airflow.dags.utils.handlers.csv_handler import CSVHandler
+from core.airflow.dags.utils.handlers.file_handler import FileHandler
 
 
 @task.branch

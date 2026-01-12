@@ -4,8 +4,8 @@ from datetime import datetime
 from airflow.sdk import dag
 from dotenv import load_dotenv
 
-from core.airflow.dags.include.consts import PROCESSED_DATASET, PROCESSED_PATH
-from core.airflow.dags.include.tasks.load_to_mongo_tasks import load
+from core.airflow.dags.utils.consts import PROCESSED_DATASET, PROCESSED_PATH
+from core.airflow.dags.utils.tasks.load_to_mongo_tasks import load
 
 load_dotenv()
 
@@ -28,8 +28,8 @@ def load_to_mongo():
 
     Requirements:
     - Environment variables loaded from `.env`.
-    - PROCESSED_DATASET and PROCESSED_PATH defined in `include.consts`.
-    - `load` task implemented in `include.tasks.load_to_mongo_tasks`.
+    - PROCESSED_DATASET and PROCESSED_PATH defined in `utils.consts`.
+    - `load` task implemented in `utils.tasks.load_to_mongo_tasks`.
     """
 
     processed_files = [

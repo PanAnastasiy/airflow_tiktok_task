@@ -4,8 +4,8 @@ from datetime import datetime
 from airflow.providers.standard.sensors.filesystem import FileSensor
 from airflow.sdk import dag
 
-from core.airflow.dags.include.consts import RAW_PATH
-from core.airflow.dags.include.tasks.process_tiktok_data_tasks import (
+from core.airflow.dags.utils.consts import RAW_PATH
+from core.airflow.dags.utils.tasks.process_tiktok_data_tasks import (
     check_file_empty,
     extract_data,
     file_is_empty,

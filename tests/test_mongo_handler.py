@@ -2,7 +2,7 @@ import mongomock
 import pandas as pd
 import pytest
 
-from core.airflow.dags.include.handlers.mongo_handler import MongoHandler
+from core.airflow.dags.utils.handlers.mongo_handler import MongoHandler
 
 
 @pytest.fixture
@@ -11,7 +11,7 @@ def mongo_mock(monkeypatch):
     Replace MongoClient with mongomock for testing.
     """
     mock_client = mongomock.MongoClient()
-    monkeypatch.setattr("include.handlers.mongo_handler.MongoClient", lambda uri: mock_client)
+    monkeypatch.setattr("utils.handlers.mongo_handler.MongoClient", lambda uri: mock_client)
     return mock_client
 
 
