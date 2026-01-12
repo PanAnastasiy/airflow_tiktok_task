@@ -2,7 +2,7 @@ import mongomock
 import pandas as pd
 import pytest
 
-from include.handlers.mongo_handler import MongoHandler
+from core.airflow.dags.include.handlers.mongo_handler import MongoHandler
 
 
 @pytest.fixture

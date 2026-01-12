@@ -1,6 +1,6 @@
 import pandas as pd
 
-from include.handlers.csv_handler import CSVHandler
+from core.airflow.dags.include.handlers.csv_handler import CSVHandler
 
 
 def test_read_creates_dataframe(tmp_path):

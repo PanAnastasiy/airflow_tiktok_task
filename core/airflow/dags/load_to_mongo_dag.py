@@ -4,8 +4,8 @@ from datetime import datetime
 from airflow.sdk import dag
 from dotenv import load_dotenv
 
-from include.consts import PROCESSED_DATASET, PROCESSED_PATH
-from include.tasks.load_to_mongo_tasks import load
+from core.airflow.dags.include.consts import PROCESSED_DATASET, PROCESSED_PATH
+from core.airflow.dags.include.tasks.load_to_mongo_tasks import load
 
 load_dotenv()
 
