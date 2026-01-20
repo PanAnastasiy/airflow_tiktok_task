@@ -7,39 +7,38 @@ This project implements a **data pipeline** using **Apache Airflow 3**, which pr
 ## 📂 Project Structure
 
 ```
-airflow_tiktok_task/
-├── .venv/
+airflow_tiktok_project/
 ├── config/
-│ ├── *.yaml / *.json / *.ini
-├── dags/
-│ ├── load_tiktok_to_mongo.py
-│ ├── process_tiktok_data.py
-├── data/
-│ ├── raw/
-│ ├── processed/
+├── core/
+│   ├── airflow/
+│   ├── dags/
+│   │   ├── data/
+│   │   │   ├── raw/
+│   │   │   └── processed/
+│   │   └── include/
+│   └── utils/
+├── handlers/
+│   ├── csv_handler.py
+│   ├── file_handler.py
+│   └── mongo_handler.py
+├── queries/
+├── tasks/
+│   ├── consts.py
+│   ├── load_to_mongo_dag.py
+│   └── process_tiktok_data_dag.py
 ├── docker_compose/
-│ └── docker-compose.yml
-├── include/
-│ ├── handlers/
-│ │ ├── csv_handler.py
-│ │ └── mongo_handler.py
-│ ├── queries/
-│ ├── tasks/
-│ └── consts.py
-├── logs/
+│   └── docker-compose.yml
 ├── tests/
-│ ├── csv_tests.py
-│ └── mongo_tests.py
-├── .dockerignore
-├── .env
+│   ├── test_csv_handler.py
+│   └── test_mongo_handler.py
 ├── .gitignore
 ├── .pre-commit-config.yaml
-├── LICENSE
 ├── Makefile
-├── poetry.lock
 ├── pyproject.toml
 └── README.md
+
 ```
+
 ### 1️⃣ `Graph view of the first DAG`
 
 ![img_1.png](graphic/img_1.png)
